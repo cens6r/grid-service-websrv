@@ -1,0 +1,5 @@
+127.116.100.3    avatar.sitetest4.robloxlabs.com
+127.116.101.3    versioncompatibility.api.sitetest4.robloxlabs.com
+127.116.102.3    clientsettingscdn.sitetest4.robloxlabs.com
+127.116.102.3    clientsettings.sitetest4.robloxlabs.com
+127.116.103.3    lms.simulpong.com
