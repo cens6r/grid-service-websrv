@@ -1,4 +1,4 @@
-./Bin
-./node_modules
+Bin
+node_modules
 .env
 Directories.ts

@@ -74,6 +74,12 @@ const sharedSettings = {
         SiteName: 'lms.simulpong.com',
         ...sharedSettings,
     });
+
+    SystemSDK.StartServer({
+        Application: LatencyMeasurementsInternalServiceServer,
+        SiteName: 'ephemeralcounters.api.sitetest4.robloxlabs.com',
+        ...sharedSettings,
+    });
 })();
 
 StandardInHandler();
