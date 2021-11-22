@@ -26,6 +26,11 @@ const sharedSettings = {
     const VersionCompatibilityServiceServer = Application();
     const LatencyMeasurementsInternalServiceServer = Application();
 
+    VersionCompatibilityServiceServer.use(LoggingHandler);
+    ClientSettingsApiServer.use(LoggingHandler);
+    AvatarApiServer.use(LoggingHandler);
+    LatencyMeasurementsInternalServiceServer.use(LoggingHandler, BlankError(false));
+
     await SystemSDK.ConfigureServer(
         SystemSDK.MetadataBuilder(AvatarApiServer, __baseDirName + '/Bin/Routes/Avatar', 'avatar.sitetest4.robloxlabs.com'),
     );
@@ -45,11 +50,6 @@ const sharedSettings = {
             'versioncompatibility.api.sitetest4.robloxlabs.com',
         ),
     );
-
-    VersionCompatibilityServiceServer.use(LoggingHandler);
-    ClientSettingsApiServer.use(LoggingHandler);
-    AvatarApiServer.use(LoggingHandler);
-    LatencyMeasurementsInternalServiceServer.use(BlankError(false));
 
     SystemSDK.StartServer({
         Application: AvatarApiServer,

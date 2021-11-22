@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 class DefaultData implements IRoutingController {
     public RequestMethod = 'ALL';
     public Callback(_request: Request, response: Response, _resumeFunction: NextFunction) {
-        return response.send({ data: [] });
+        return response.send([]);
     }
 }
 
