@@ -1,44 +1,42 @@
 export class PredicateLoaders {
-	public static SomePredicate(predicate: (char: string) => boolean, listOfChars: string[]) {
-		const len = listOfChars.length;
-		for (let i = 0; i < len; i++) {
-			if (predicate(listOfChars[i]) === true) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public static SomePredicate(predicate: (char: string) => boolean, listOfChars: string[]) {
+        const len = listOfChars.length;
+        for (let i = 0; i < len; i++) {
+            if (predicate(listOfChars[i]) === true) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 const Whitespace = [
-	' ',
-	'  ',
-	'\b',
-	'\t',
-	'\n',
-	'\v',
-	'\f',
-	'\r',
-	`\"`,
-	`\'`,
-	`\\`,
-	'\u0008',
-	'\u0009',
-	'\u000A',
-	'\u000B',
-	'\u000C',
-	'\u000D',
-	'\u0020',
-	'\u0022',
-	'\u0027',
-	'\u005C',
-	'\u00A0',
-	'\u2028',
-	'\u2029',
-	'\uFEFF',
+    ' ',
+    '  ',
+    '\b',
+    '\t',
+    '\n',
+    '\v',
+    '\f',
+    '\r',
+    `\"`,
+    `\'`,
+    `\\`,
+    '\u0008',
+    '\u0009',
+    '\u000A',
+    '\u000B',
+    '\u000C',
+    '\u000D',
+    '\u0020',
+    '\u0022',
+    '\u0027',
+    '\u005C',
+    '\u00A0',
+    '\u2028',
+    '\u2029',
+    '\uFEFF',
 ];
-
-
 
 export class WebParsers {
     public static StripTheTrailingSlash(str: string) {
@@ -66,7 +64,7 @@ export class WebParsers {
     public static CheckDoesStringIncludeInvalidChars(str: string) {
         return str.match(/^[A-Za-z0-9_-]*$/g) === null;
     }
-	
+
     public static CheckDoesStringIncludeWhitespace(str: string) {
         return PredicateLoaders.SomePredicate((char) => str.indexOf(char) > -1, Whitespace);
     }

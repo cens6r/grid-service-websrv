@@ -1,5 +1,5 @@
 export interface ISiteRouteSetupOptions {
-	RouteStorePath?: string;
-	LogRouteSetup?: boolean;
-	SiteName?: string;
+    RouteStorePath?: string;
+    LogRouteSetup?: boolean;
+    SiteName?: string;
 }

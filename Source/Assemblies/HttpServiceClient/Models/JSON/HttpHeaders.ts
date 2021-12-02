@@ -1,3 +1,3 @@
 export interface HttpHeaders {
-	[key: string]: string;
+    [key: string]: string;
 }

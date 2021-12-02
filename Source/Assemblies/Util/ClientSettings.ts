@@ -136,7 +136,6 @@ export class ClientSettings {
 
     public static GetPlaceIdInPlaceFilter(key: string, placeId: number, ctx: string = 'Web') {
         const FPFilter = ClientSettings.GetFPFilters(ctx);
-        // This should never go through unless files.api.sitetest4.robloxlabs.com/ClientSettingsFormatted dies.
         if (FPFilter === undefined) return false;
 
         const keyFilter = FPFilter[key] as Record<string, unknown>;

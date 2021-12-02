@@ -1,3 +1,3 @@
 export interface HttpQueries {
-	[key: string]: any;
+    [key: string]: any;
 }

@@ -7,6 +7,7 @@ import { LoggingHandler } from './Assemblies/Middleware/Logger';
 import { StandardInHandler } from './StandardInHandler';
 import { SystemSDK } from 'Assemblies/Setup/Lib/SystemSDK';
 import { __baseDirName } from 'Assemblies/Directories';
+import { FileSystemHelper } from 'Assemblies/Caching/FileSystem/FileSystemHelper';
 
 const sharedSettings = {
     UseSsl: true,
@@ -21,21 +22,25 @@ const sharedSettings = {
 };
 
 (async () => {
+    FileSystemHelper.ClearAllFileSystemCacheRepositories();
+
     const AvatarApiServer = Application();
     const ClientSettingsApiServer = Application();
+    const EphemeralCountersServiceServer = Application();
     const VersionCompatibilityServiceServer = Application();
     const LatencyMeasurementsInternalServiceServer = Application();
 
+    EphemeralCountersServiceServer.use(LoggingHandler);
     VersionCompatibilityServiceServer.use(LoggingHandler);
     ClientSettingsApiServer.use(LoggingHandler);
     AvatarApiServer.use(LoggingHandler);
     LatencyMeasurementsInternalServiceServer.use(LoggingHandler, BlankError(false));
 
-    await SystemSDK.ConfigureServer(
+    SystemSDK.ConfigureServer(
         SystemSDK.MetadataBuilder(AvatarApiServer, __baseDirName + '/Bin/Routes/Avatar', 'avatar.sitetest4.robloxlabs.com'),
     );
 
-    await SystemSDK.ConfigureServer(
+    SystemSDK.ConfigureServer(
         SystemSDK.MetadataBuilder(
             ClientSettingsApiServer,
             __baseDirName + '/Bin/Routes/ClientSettings',
@@ -43,7 +48,15 @@ const sharedSettings = {
         ),
     );
 
-    await SystemSDK.ConfigureServer(
+    SystemSDK.ConfigureServer(
+        SystemSDK.MetadataBuilder(
+            EphemeralCountersServiceServer,
+            __baseDirName + '/Bin/Routes/EphemeralCounters',
+            'ephemeralcounters.api.sitetest4.robloxlabs.com',
+        ),
+    );
+
+    SystemSDK.ConfigureServer(
         SystemSDK.MetadataBuilder(
             VersionCompatibilityServiceServer,
             __baseDirName + '/Bin/Routes/VersionCompatibility',
@@ -76,7 +89,7 @@ const sharedSettings = {
     });
 
     SystemSDK.StartServer({
-        Application: LatencyMeasurementsInternalServiceServer,
+        Application: EphemeralCountersServiceServer,
         SiteName: 'ephemeralcounters.api.sitetest4.robloxlabs.com',
         ...sharedSettings,
     });
