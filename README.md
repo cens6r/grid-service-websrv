@@ -1,4 +1,4 @@
-<h2 align="center"><b>A simple Website Template for Express JS.</b></h2>
+<h2 align="center"><b>Roblox Grid Service Web Server.</b></h2>
 <hr />
 <br />
 <p align="center">
