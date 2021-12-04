@@ -2,12 +2,14 @@ import { ImportHandler } from './ImportHandler';
 ImportHandler();
 
 import Application from 'express';
-import { BlankError } from './Assemblies/Middleware/BlankError';
 import { LoggingHandler } from './Assemblies/Middleware/Logger';
 import { StandardInHandler } from './StandardInHandler';
 import { SystemSDK } from 'Assemblies/Setup/Lib/SystemSDK';
 import { __baseDirName } from 'Assemblies/Directories';
 import { FileSystemHelper } from 'Assemblies/Caching/FileSystem/FileSystemHelper';
+import { DotENV } from 'Assemblies/Util/DotENV';
+
+DotENV.GlobalConfigure();
 
 const sharedSettings = {
     UseSsl: true,
@@ -34,7 +36,9 @@ const sharedSettings = {
     VersionCompatibilityServiceServer.use(LoggingHandler);
     ClientSettingsApiServer.use(LoggingHandler);
     AvatarApiServer.use(LoggingHandler);
-    LatencyMeasurementsInternalServiceServer.use(LoggingHandler, BlankError(false));
+    LatencyMeasurementsInternalServiceServer.use(LoggingHandler, (_, response) => {
+        response.send('robloxup');
+    });
 
     SystemSDK.ConfigureServer(
         SystemSDK.MetadataBuilder(AvatarApiServer, __baseDirName + '/Bin/Routes/Avatar', 'avatar.sitetest4.robloxlabs.com'),

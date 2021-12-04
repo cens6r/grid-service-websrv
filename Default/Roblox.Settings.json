@@ -69,7 +69,8 @@
 				"PlayerShutdownLuaTimeoutSeconds": 0,
 				"VR": 0,
 				"LocalStorage": 0,
-				"RCCServiceJobs": 0
+				"RCCServiceJobs": 0,
+				"Graphics": 7
 			},
 			"DFLog": {
 				"AnalyticsDeferredEphemeralReportingDiagnostic": 0,

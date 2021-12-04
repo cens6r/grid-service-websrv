@@ -25,6 +25,6 @@ export class NetUtil {
     }
 
     public static GetMachineID() {
-        return process.env.MFDLABS_MACHINE_ID || GetMachineHost();
+        return process.env.MFDLABS_MACHINE_ID ?? GetMachineHost();
     }
 }
