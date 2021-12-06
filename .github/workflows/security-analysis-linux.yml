@@ -20,6 +20,7 @@ on:
 
 jobs:
   production-security-analysis-linux:
+    if: "!contains(toJSON(github.event.commits.*.message), '[SKIP ANALYSIS]')"
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
