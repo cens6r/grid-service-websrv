@@ -17,10 +17,10 @@ const sharedSettings = {
     InsecurePort: 80,
     SslPort: 443,
     UseSslDirectoryName: true,
-    CertificateFileName: 'ST4.crt',
-    CertificateKeyPassword: 'ST4_RBXLABS',
-    RootCertificateFileName: 'rootCA.crt',
-    CertificateKeyFileName: 'ST4.key',
+    CertificateFileName: 'mfdlabs-all-authority-grid-service-websrv.crt',
+	CertificateKeyFileName: 'mfdlabs-all-authority-grid-service-websrv.key',
+    CertificateKeyPassword: 'MPaunCfrH4GhDhdZKFLFpUeya3K3UHWfrNsZWCsyg3JEYHdQHhLvHxGzJpUVcQ8e',
+    RootCertificateFileName: 'mfdlabs-root-ca-client-products-v1.crt'
 };
 
 (async () => {

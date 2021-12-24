@@ -1,6 +1,3 @@
-TODO: Put MFDLABS signed certificates into the SSL folder.
-<hr />
-
 <h2 align="center"><b>Roblox Grid Service Web Server.</b></h2>
 <hr />
 <br />
