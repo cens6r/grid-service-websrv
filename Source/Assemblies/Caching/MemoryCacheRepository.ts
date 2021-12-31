@@ -205,8 +205,8 @@ export class MemoryCacheRepository extends BaseCacheRepository {
     }
 
     protected OnResetTimer(repo: MemoryCacheRepository): void {
-        Logger.Debug("Reset Memory Cache Repository '%s'", repo._Name);
         if (repo._MemoryCache.size > 0) {
+            Logger.Debug("Reset Memory Cache Repository '%s'", repo._Name);
             repo._MemoryCache.clear();
         }
     }

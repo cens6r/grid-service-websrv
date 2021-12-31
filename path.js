@@ -18,7 +18,7 @@ const fs = require('fs');
             return;
         }
         let contents = fs.readFileSync(fileName, { encoding: 'utf-8' });
-        if (contents.includes('// !DISABLE-AUTO-SELECT-DIR')) {
+        if (contents.includes('// !DISABLE-AUTO-SELECT-DIR') && !process.argv[2].includes('-f')) {
             console.log(
                 `The file ./Source/Assemblies/Directories.ts was forced to not select the current directory. Most likely because it's already been generated.`,
             );

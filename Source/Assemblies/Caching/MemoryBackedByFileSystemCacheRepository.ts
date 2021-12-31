@@ -190,8 +190,8 @@ export class MemoryBackedByFileSystemCacheRepository extends BaseCacheRepository
     // There's a dumb issue when calling an inherited method from a super method where the inherited method's `this` is undefined.
     // So just pass the super's `this` to the inherited method and for some reason it works.
     protected OnResetTimer(repo: MemoryBackedByFileSystemCacheRepository): void {
-        Logger.Debug(`Resetting ${this._Name}`);
         if (repo._MemoryCache.GetAllCachedValues().size > 0) {
+            Logger.Debug(`Transitioning items from MemoryCache(${this._Name}) to FileSystemCache(${this._Name})`);
             repo._FileSystemCache.Clear();
             repo.MoveAllKeysToFileSystem();
         }

@@ -207,9 +207,9 @@ export class FileSystemCacheRepository extends BaseCacheRepository {
     }
 
     protected OnResetTimer(repo: FileSystemCacheRepository): void {
-        Logger.Debug("Reset timer for FileSystem Cache Repository '%s'", repo._Name);
         const cacheStoreSize = FileSystemHelper.GetFileSystemCacheRepositorySize(repo._Name);
         if (cacheStoreSize > 0) {
+            Logger.Debug("Reset timer for FileSystem Cache Repository '%s'", repo._Name);
             FileSystemHelper.ClearFileSystemCacheRepository(repo._Name);
         }
     }

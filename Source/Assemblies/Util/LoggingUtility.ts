@@ -7,7 +7,9 @@ import {
 } from 'fs';
 import { NetUtil } from './NetworkingUtility';
 import { GlobalEnvironment } from './GlobalEnvironment';
-import { __baseDirName } from 'Assemblies/Directories';
+import { join as win32join } from 'path/win32';
+import { join as posixjoin } from 'path/posix';
+import { homedir } from 'os';
 
 export class Logger {
     private static ConstructLoggerMessage(type: string, message: string, ...args: any[]) {
@@ -16,7 +18,7 @@ export class Logger {
                 process.arch
             }][${
                 process.version
-            }][${NetUtil.GetLocalIP()}][${NetUtil.GetMachineID()}][${__baseDirName}][server][${type.toUpperCase()}] ${message}\n`,
+            }][${NetUtil.GetLocalIP()}][${NetUtil.GetMachineID()}][server][${type.toUpperCase()}] ${message}\n`,
             ...args,
         );
     }
@@ -24,15 +26,16 @@ export class Logger {
     private static GetDirNameByOS() {
         switch (process.platform) {
             case 'win32':
-                return `${process.env.LOCALAPPDATA}\\MFDLABS\\Web\\Logs`;
+                return win32join(process.env.LOCALAPPDATA, 'RBX-Grid-WebSrv', 'Logs');
             case 'linux' || 'darwin':
-                return `/opt/mfdlabs/log`;
+                return posixjoin(homedir(), '.cache', 'rbx-grid-websrv', 'logs');
         }
     }
 
     private static LogLocally(type: string, message: string, ...args: any[]) {
         const str = Logger.ConstructLoggerMessage(type, message, ...args);
         const dirName = Logger.GetDirNameByOS();
+        
         if (!CheckDoesFileOrFolderExist(dirName)) CreateDirectory(dirName, { recursive: true });
 
         AppendStringToFile(dirName + `/log_${process.pid.toString(16).toUpperCase()}.log`, str);
@@ -53,6 +56,7 @@ export class Logger {
         Logger.Log('Clearing LocalLog...');
 
         const dirName = Logger.GetDirNameByOS();
+
         if (CheckDoesFileOrFolderExist(dirName)) {
             RemoveDirectory(dirName, { recursive: true, force: true });
             return;
@@ -100,6 +104,6 @@ export class Logger {
             .uptime()
             .toFixed(7)}\x1b[0m][\x1b[90m${process.pid.toString(16)}\x1b[0m][\x1b[90m${process.platform}-${process.arch}\x1b[0m][\x1b[90m${
             process.version
-        }\x1b[0m][\x1b[90m${NetUtil.GetLocalIP()}\x1b[0m][\x1b[90m${NetUtil.GetMachineID()}\x1b[0m][\x1b[90m${__baseDirName}\x1b[0m][server]`;
+        }\x1b[0m][\x1b[90m${NetUtil.GetLocalIP()}\x1b[0m][\x1b[90m${NetUtil.GetMachineID()}\x1b[0m][server]`;
     }
 }

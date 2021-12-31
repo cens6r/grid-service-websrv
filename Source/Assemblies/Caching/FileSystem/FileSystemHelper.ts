@@ -16,6 +16,9 @@ import {
     unlinkSync as DeleteLocally,
 } from 'fs';
 
+import { join as posixjoin } from 'path/posix';
+import { homedir } from 'os';
+
 /**
  * A helper class for the file system.
  */
@@ -187,9 +190,9 @@ export class FileSystemHelper {
     private static GetCacheDirectoryByOS() {
         switch (process.platform) {
             case 'linux' || 'darwin':
-                return '/var/cache/roblox/';
+                return posixjoin(homedir(), '.cache', 'rbx-grid-websrv', 'cache');
             case 'win32':
-                return 'C:/Roblox/TempFiles/Persistence/';
+                return 'C:\\Roblox\\TempFiles\\Persistence\\';
         }
     }
 }

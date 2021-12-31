@@ -98,9 +98,6 @@ interface Legacy2AvatarFetchModel {
 export class AvatarRequestProcessor {
     /* Constants */
     private static readonly GLOBAL_CONFIG: ClientRequest = {
-        QueryString: {
-            ApiKey: '8DAE2E89-BCFA-4735-AB79-D9A07ABA9263',
-        },
         Method: HttpRequestMethodEnum.GET,
     };
     private static readonly API_PROXY_GET_BY_USERNAME = BaseURL.ConstructServicePathFromHostSimple(
@@ -264,7 +261,7 @@ export class AvatarRequestProcessor {
         await this.TryUpdateUserIDByUserName();
         const key = `Avatars_Legacy2AvatarFetchModel:${this.userID}:${this.userName}:${this.placeID}`;
         const [isCached, cachedValue] =
-            AvatarRequestProcessor.QueriedCharacterFetchCacheRepo.GetCachedValueJson<Legacy2AvatarFetchModel>(key);
+            AvatarRequestProcessor.Legacy2CharacterFetchCacheRepo.GetCachedValueJson<Legacy2AvatarFetchModel>(key);
 
         if (isCached) return this._response.send(cachedValue);
         return this._response.send(await this.GetAvatarResponseModelAsync());
