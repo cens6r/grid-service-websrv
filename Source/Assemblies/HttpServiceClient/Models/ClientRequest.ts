@@ -8,4 +8,5 @@ export interface ClientRequest {
     Payload?: string;
     AdditionalHeaders?: HttpHeaders;
     QueryString?: HttpQueries;
+    EnableLogging?: bool;
 }

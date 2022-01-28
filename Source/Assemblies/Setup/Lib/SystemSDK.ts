@@ -16,6 +16,12 @@ import { RoutingControllerDelegate } from 'Assemblies/Setup/Interfaces/RoutingCo
 import { Logger } from 'Assemblies/Util/LoggingUtility';
 
 export class SystemSDK {
+    private static BaseRoutesPath: string = 'Routes';
+
+    public static SetBaseRoutesPath(path: string): void {
+        SystemSDK.BaseRoutesPath = path;
+    }
+
     public static ConfigureServer(options: IConfigurationOptions): void {
         try {
             options.Application.disable('case sensitive routing');
@@ -39,7 +45,7 @@ export class SystemSDK {
             Application: application,
             UseRouting: true,
             RouteConfiguration: {
-                RouteStorePath: routeDirectory,
+                RouteStorePath: `${__baseDirName}/Bin/${SystemSDK.BaseRoutesPath}/${routeDirectory}`,
                 LogRouteSetup: true,
                 SiteName: siteName,
             },

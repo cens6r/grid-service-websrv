@@ -1,7 +1,7 @@
 import { ClientRequest } from './Models/ClientRequest';
 import { ClientResponse } from './Models/ClientResponse';
 import { HttpRequestMethodEnum } from './Enumeration/HttpRequestMethodEnum';
-import WebClient, { Method } from 'axios';
+import WebClient, { AxiosResponse, Method } from 'axios';
 import SSL from 'https';
 import { hostname as GetCurrentMachineName, networkInterfaces as GetNetworkInterfaces } from 'os';
 import { Logger } from 'Assemblies/Util/LoggingUtility';
@@ -50,35 +50,10 @@ export class HttpClient {
             if (!this.request)
                 return resumeFunction([false, null, new TypeError("The request was null, please update it via 'UpdateConfiguration'.")]);
 
-            let parsedQs = new URLSearchParams(this.request.QueryString).toString();
-            parsedQs = parsedQs.replace(/\?/g, '');
-            const requestUrl = `${this.request.Url}?${parsedQs}`;
-            let requestMethod: Method = 'GET';
-            switch (this.request.Method) {
-                case HttpRequestMethodEnum.GET:
-                    requestMethod = 'GET';
-                    break;
-                case HttpRequestMethodEnum.POST:
-                    requestMethod = 'POST';
-                    break;
-                case HttpRequestMethodEnum.DELETE:
-                    requestMethod = 'DELETE';
-                    break;
-                case HttpRequestMethodEnum.HEAD:
-                    requestMethod = 'HEAD';
-                    break;
-                case HttpRequestMethodEnum.OPTIONS:
-                    requestMethod = 'OPTIONS';
-                    break;
-                case HttpRequestMethodEnum.PATCH:
-                    requestMethod = 'PATCH';
-                    break;
-                case HttpRequestMethodEnum.PUT:
-                    requestMethod = 'PUT';
-                    break;
-            }
+            const requestUrl = this.GetRequestUrl();
+            const requestMethod = this.GetHttpMethod();
 
-            Logger.Log(`Performing ${requestMethod} request on the URL '${requestUrl}'`);
+            if (this.request.EnableLogging === true) Logger.Log(`Performing ${requestMethod} request on the URL '${requestUrl}'`);
 
             WebClient.request({
                 url: requestUrl,
@@ -92,48 +67,81 @@ export class HttpClient {
                 },
                 data: this.request.Payload,
             })
-                .then((response) => {
-                    resumeFunction([
-                        true,
-                        {
-                            Url: requestUrl,
-                            Method: this.request.Method,
-                            ResponsePayload: response.data,
-                            Headers: response.headers,
-                            StatusCode: response.status,
-                            StatusMessage: response.statusText,
-                        },
-                        null,
-                    ]);
-                })
+                .then((response) => this.HandleResponse(resumeFunction, requestUrl, response))
                 .catch((err) => {
-                    if (err.response) {
-                        return resumeFunction([
-                            false,
-                            {
-                                Url: requestUrl,
-                                Method: this.request.Method,
-                                ResponsePayload: err.response.data,
-                                Headers: err.response.headers,
-                                StatusCode: err.response.status,
-                                StatusMessage: err.response.statusText,
-                            },
-                            err,
-                        ]);
-                    }
-                    return resumeFunction([
-                        false,
-                        {
-                            Url: requestUrl,
-                            Method: this.request.Method,
-                            ResponsePayload: null,
-                            Headers: null,
-                            StatusCode: 0,
-                            StatusMessage: 'ConnectionError',
-                        },
-                        err,
-                    ]);
+                    if (err.response) return this.HandleResponse(resumeFunction, requestUrl, err.response);
+                    return this.HandleDefaultHttpError(resumeFunction, requestUrl, err);
                 });
         });
+    }
+
+    private GetRequestUrl() {
+        let parsedQs = new URLSearchParams(this.request.QueryString).toString();
+        parsedQs = parsedQs.replace(/\?/g, '');
+        const requestUrl = `${this.request.Url}?${parsedQs}`;
+        return requestUrl;
+    }
+
+    private GetHttpMethod() {
+        let requestMethod: Method = 'GET';
+
+        switch (this.request.Method) {
+            case HttpRequestMethodEnum.GET:
+                requestMethod = 'GET';
+                break;
+            case HttpRequestMethodEnum.POST:
+                requestMethod = 'POST';
+                break;
+            case HttpRequestMethodEnum.DELETE:
+                requestMethod = 'DELETE';
+                break;
+            case HttpRequestMethodEnum.HEAD:
+                requestMethod = 'HEAD';
+                break;
+            case HttpRequestMethodEnum.OPTIONS:
+                requestMethod = 'OPTIONS';
+                break;
+            case HttpRequestMethodEnum.PATCH:
+                requestMethod = 'PATCH';
+                break;
+            case HttpRequestMethodEnum.PUT:
+                requestMethod = 'PUT';
+                break;
+        }
+        return requestMethod;
+    }
+
+    private HandleDefaultHttpError(resumeFunction: (value: [bool, ClientResponse, Error]) => void, requestUrl: string, err?: any) {
+        resumeFunction([
+            false,
+            {
+                Url: requestUrl,
+                Method: this.request.Method,
+                ResponsePayload: null,
+                Headers: null,
+                StatusCode: 0,
+                StatusMessage: 'ConnectionError',
+            },
+            err,
+        ]);
+    }
+
+    private HandleResponse(
+        resumeFunction: (value: [bool, ClientResponse, Error]) => void,
+        requestUrl: string,
+        response: AxiosResponse<any>,
+    ) {
+        resumeFunction([
+            true,
+            {
+                Url: requestUrl,
+                Method: this.request.Method,
+                ResponsePayload: response.data,
+                Headers: response.headers,
+                StatusCode: response.status,
+                StatusMessage: response.statusText,
+            },
+            null,
+        ]);
     }
 }

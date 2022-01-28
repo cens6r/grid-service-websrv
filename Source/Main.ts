@@ -1,3 +1,5 @@
+/** TODO: Consul Service discovery for the listener Urls for BEDEV2 **/
+
 import { ImportHandler } from './ImportHandler';
 ImportHandler();
 
@@ -8,6 +10,7 @@ import { SystemSDK } from 'Assemblies/Setup/Lib/SystemSDK';
 import { __baseDirName } from 'Assemblies/Directories';
 import { FileSystemHelper } from 'Assemblies/Caching/FileSystem/FileSystemHelper';
 import { DotENV } from 'Assemblies/Util/DotENV';
+import { Urls } from 'Assemblies/UrlMappings';
 
 DotENV.GlobalConfigure();
 
@@ -18,83 +21,62 @@ const sharedSettings = {
     SslPort: 443,
     UseSslDirectoryName: true,
     CertificateFileName: 'mfdlabs-all-authority-grid-service-websrv.crt',
-	CertificateKeyFileName: 'mfdlabs-all-authority-grid-service-websrv.key',
+    CertificateKeyFileName: 'mfdlabs-all-authority-grid-service-websrv.key',
     CertificateKeyPassword: 'MPaunCfrH4GhDhdZKFLFpUeya3K3UHWfrNsZWCsyg3JEYHdQHhLvHxGzJpUVcQ8e',
-    RootCertificateFileName: 'mfdlabs-root-ca-client-products-v1.crt'
+    RootCertificateFileName: 'mfdlabs-root-ca-client-products-v1.crt',
 };
 
 (async () => {
     FileSystemHelper.ClearAllFileSystemCacheRepositories();
 
     const AvatarApiServer = Application();
-    const ClientSettingsApiServer = Application();
-    const EphemeralCountersServiceServer = Application();
-    const VersionCompatibilityServiceServer = Application();
-    const LatencyMeasurementsInternalServiceServer = Application();
+    const ClientSettingsServer = Application();
+    const EphemeralCountersServer = Application();
+    const VersionCompatibilityServer = Application();
+    const LatencyMeasurementsServer = Application();
 
-    EphemeralCountersServiceServer.use(LoggingHandler);
-    VersionCompatibilityServiceServer.use(LoggingHandler);
-    ClientSettingsApiServer.use(LoggingHandler);
     AvatarApiServer.use(LoggingHandler);
-    LatencyMeasurementsInternalServiceServer.use(LoggingHandler, (_, response) => {
-        response.send('robloxup');
-    });
+    LatencyMeasurementsServer.use((_, response) => response.send('robloxup'));
 
-    SystemSDK.ConfigureServer(
-        SystemSDK.MetadataBuilder(AvatarApiServer, __baseDirName + '/Bin/Routes/Avatar', 'avatar.sitetest4.robloxlabs.com'),
-    );
+    SystemSDK.SetBaseRoutesPath('Routes');
 
-    SystemSDK.ConfigureServer(
-        SystemSDK.MetadataBuilder(
-            ClientSettingsApiServer,
-            __baseDirName + '/Bin/Routes/ClientSettings',
-            'clientsettingscdn.sitetest4.robloxlabs.com',
-        ),
-    );
+    SystemSDK.ConfigureServer(SystemSDK.MetadataBuilder(AvatarApiServer, 'Avatar', Urls.Avatar));
+    SystemSDK.ConfigureServer(SystemSDK.MetadataBuilder(ClientSettingsServer, 'ClientSettings', Urls.ClientSettings));
+    SystemSDK.ConfigureServer(SystemSDK.MetadataBuilder(EphemeralCountersServer, 'EphemeralCounters', Urls.EphemeralCounters));
+    SystemSDK.ConfigureServer(SystemSDK.MetadataBuilder(VersionCompatibilityServer, 'VersionCompatibility', Urls.VersionCompatibility));
 
-    SystemSDK.ConfigureServer(
-        SystemSDK.MetadataBuilder(
-            EphemeralCountersServiceServer,
-            __baseDirName + '/Bin/Routes/EphemeralCounters',
-            'ephemeralcounters.api.sitetest4.robloxlabs.com',
-        ),
-    );
-
-    SystemSDK.ConfigureServer(
-        SystemSDK.MetadataBuilder(
-            VersionCompatibilityServiceServer,
-            __baseDirName + '/Bin/Routes/VersionCompatibility',
-            'versioncompatibility.api.sitetest4.robloxlabs.com',
-        ),
-    );
-
+    // Avatar API
     SystemSDK.StartServer({
         Application: AvatarApiServer,
-        SiteName: 'avatar.sitetest4.robloxlabs.com',
+        SiteName: Urls.Avatar,
         ...sharedSettings,
     });
 
+    // Client Settings API
     SystemSDK.StartServer({
-        Application: ClientSettingsApiServer,
-        SiteName: 'clientsettingscdn.sitetest4.robloxlabs.com',
+        Application: ClientSettingsServer,
+        SiteName: Urls.ClientSettings,
         ...sharedSettings,
     });
 
+    // Ephemeral Counters Service
     SystemSDK.StartServer({
-        Application: VersionCompatibilityServiceServer,
-        SiteName: 'versioncompatibility.api.sitetest4.robloxlabs.com',
+        Application: VersionCompatibilityServer,
+        SiteName: Urls.VersionCompatibility,
         ...sharedSettings,
     });
 
+    // Latency Measurements Service, used by the grid deployer in order to determine if the local HTTP server is Alive and is the WebSrv (it could be IIS)
     SystemSDK.StartServer({
-        Application: LatencyMeasurementsInternalServiceServer,
-        SiteName: 'lms.simulpong.com',
-        ...sharedSettings,
+        Application: LatencyMeasurementsServer,
+        SiteName: Urls.LatencyMeasurements,
+        UseSsl: false,
     });
 
+    // Ephmeral Counters Service, reports Google Analytics data
     SystemSDK.StartServer({
-        Application: EphemeralCountersServiceServer,
-        SiteName: 'ephemeralcounters.api.sitetest4.robloxlabs.com',
+        Application: EphemeralCountersServer,
+        SiteName: Urls.EphemeralCounters,
         ...sharedSettings,
     });
 })();
