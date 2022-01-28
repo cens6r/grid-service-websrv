@@ -71,6 +71,7 @@ const sharedSettings = {
         Application: LatencyMeasurementsServer,
         SiteName: Urls.LatencyMeasurements,
         UseSsl: false,
+        UseInsecure: true,
     });
 
     // Ephmeral Counters Service, reports Google Analytics data
