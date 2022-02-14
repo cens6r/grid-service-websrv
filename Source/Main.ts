@@ -36,7 +36,7 @@ const sharedSettings = {
     const LatencyMeasurementsServer = Application();
 
     AvatarApiServer.use(LoggingHandler);
-    LatencyMeasurementsServer.use((_, response) => response.send('robloxup'));
+    LatencyMeasurementsServer.use(LoggingHandler, (_, response) => response.send('robloxup'));
 
     SystemSDK.SetBaseRoutesPath('Routes');
 
