@@ -1,0 +1,72 @@
+name: Internal Bug Report
+description: File an internal bug report if you cannot reach Jira or Backlog. Do not make it too verbose, i.e. no credentials or content that shouldn't be public
+title: "[Internal Bug]: "
+labels: ["bug", "requires-review"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to fill out this bug report!
+  - type: checkboxes
+    attributes:
+      label: Check Jira or BackLog for an already existing issue.
+      description: Please refer to the Jira Project [GRIDBOT](https://jira.mfdlabs.local/browse/GRDSRV), [Backlog](https://rblx.backlog-2time.vmminfra.local/ui/roblox/grid-service-websrv/issues), 
+                    and [Confluence](https://rblx.confluence.mfdlabs.local/display/GRDSRV/Change+Log) before reporting issues.
+      options:
+      - label: "I double checked jira, backlog and confluence and couldn't find any useful information."
+        required: true
+  - type: checkboxes
+    attributes:
+      label: Verify Issue Source
+      description: If your issue is related to an exception make sure the error was thrown by the service itself and not your own code.
+      options:
+      - label: I verified the issue was caused by the service itself.
+        required: true
+  - type: checkboxes
+    attributes:
+      label: Check your branch
+      description: If you are on a branch that is not master, is behind master, or otherwise does not have any new commits, it is most likely an unstable branch and you should not use it
+      options:
+      - label: I double checked that I have an inline-ish branch.
+        required: true
+  - type: textarea
+    id: description
+    attributes: 
+      label: Description
+      description: A brief explination of the bug.
+      placeholder: When I start the service, it just throws a lot permission denied errors.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Branch and Commit Hash
+      description: The branch name and commit hash to use to determine what version you are using.
+      placeholder: ex. master:73801af9d339fb969b21a854cd0cb3cd3a60b36d
+    validations:
+      required: true
+  - type: input
+    id: working-commit
+    attributes:
+      label: Working Commit and branch
+      description: If this worked on any older commits, or any other branches, please specify them here.
+      placeholder: ex. master:73801af9d339fb969b21a854cd0cb3cd3a60b36d
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes: 
+      label: Logs
+      description: Add applicable logs and/or a stacktrace here.
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Sample
+      description: Include a (short) code sample that reproduces your issue 100% of time (comments would be great).
+      placeholder: |
+        ```ts
+        function Test() { return "Hello World"; }
+        ```
+    validations:
+      required: false
