@@ -1,0 +1,48 @@
+name: Feature Request
+description: Request a new feature
+title: "[Feature]: "
+labels: ["enhancement", "requires-review"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to fill out this feature request!
+  - type: checkboxes
+    attributes:
+      label: Check if there is an existing issue or pull request
+      description: Please check the [issues](https://github.com/mfdlabs-grid-development/grid-service-websrv/issues) and [pull requests](https://github.com/mfdlabs-grid-development/grid-service-websrv/pulls) to determine if your feature request is already in the works or has already been requested.
+      options:
+      - label: "I double checked issues and pull requests and couldn't find any duplicates."
+        required: true
+  - type: checkboxes
+    attributes:
+      label: Verify Feature Quality.
+      description: If your feature is actually worth being integrated.
+      options:
+      - label: I verified the feature I requested is not useless.
+        required: true
+  - type: checkboxes
+    attributes:
+      label: Check if it was already integrated.
+      description: Check the [commit history](https://github.com/mfdlabs-grid-development/grid-service-websrv/commits) to determine if the feature already exists in the app.
+      options:
+      - label: I double checked that the feature is 100% authentic.
+        required: true
+  - type: textarea
+    id: description
+    attributes: 
+      label: Description
+      description: A brief explination of the feature. How does this feature improve our application?
+      placeholder: It adds new code and stuff blah blah.
+    validations:
+      required: true
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples
+      description: Provide example usage of your changes, or the feature you requested.
+      placeholder: |
+        ```ts
+        function Test() { return "Hello World"; }
+        ```
+    validations:
+      required: false
