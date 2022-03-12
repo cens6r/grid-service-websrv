@@ -53,8 +53,13 @@
 				"NetworkAudit": 0
 			},
 			"SFLog": {},
-			"FFlag": {},
-			"DFFlag": {},
+			"FFlag": {
+				"SupportMeshV4ReadSkinData": true,
+				"SupportMeshV4Write": true
+			},
+			"DFFlag": {
+				"SupportMeshV4Read": true
+			},
 			"SFFlag": {},
 			"FInt": {},
 			"DFInt": {
