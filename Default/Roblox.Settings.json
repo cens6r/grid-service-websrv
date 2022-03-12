@@ -55,7 +55,8 @@
 			"SFLog": {},
 			"FFlag": {
 				"SupportMeshV4ReadSkinData": true,
-				"SupportMeshV4Write": true
+				"SupportMeshV4Write": true,
+				"NewHeadshotLighting":true
 			},
 			"DFFlag": {
 				"SupportMeshV4Read": true
